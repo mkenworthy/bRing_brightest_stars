@@ -7,4 +7,4 @@
 
 Rosa Hoogenboom, Sanna Heesakker, Matthew A. Kenworthy, Remko Stuik, Ignas Snellen, Patrick Dorval
 
-![Two light curves](https://github.com/mkenworthy/HWObows/two_bring_light_curves.jpg "Two bRing light curves")
+![Two light curves](two_bring_light_curves.jpg "Two bRing light curves")
