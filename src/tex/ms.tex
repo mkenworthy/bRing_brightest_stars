@@ -90,7 +90,7 @@
              \email{kenworthy@strw.leidenuniv.nl}
               }
 
-   \date{Received September XX, 2020; accepted XXXX}
+   \date{Received \today; accepted XXXX}
 
 % \abstract{}{}{}{}{} 
 % 5 {} token are mandatory
@@ -259,7 +259,7 @@ We started the data reduction by selecting good data points from the daily and q
 \begin{itemize}
     \item First, the long exposures were discarded. Only the short exposures were used, because the long exposures can only be used to observe stars fainter than magnitude 4. This is due to the fact that images taken with long exposure times have a higher chance of being saturated than the short exposures.
     \item Next, we used the astrometry and photometry flags of the daily data. These tell us if the measured flux is too high or too low to be realistic or if no photometry was performed due to the star being too close to the edge of the image, for example. Only the data without any bad flags was used. 
-    \item We made sure that the magnitude error for the daily data is always greater than zero and finite, so no incorrect values are encountered.
+    \item We made sure that the magnitude error for the daily data is always greater than zero and finite, so no incorrect values are encountered. The magnitude values were also ensured to be finite.
     \item All data where the Sun is lower than $-18\degr$ was selected. This was added to ensure that the sky background did not get too bright. 
     \item Next, the data points where the cloud error was 3$\sigma$ above the mean cloud error were deleted. The 3$\sigma$ cutoff was estimated by eye. The cloud error tells us how the transmission changes over time; a big change might mean a cloud is in view. These outliers usually indicate that the clouds are variable at that point in time, in which case the data should not be used.
 \end{itemize}
@@ -584,6 +584,10 @@ The light curves are most suitable for finding variability in the stars' emissio
       \item asdf
       \item asdf
    \end{enumerate}
+
+
+
+
 
 \begin{acknowledgements}
 
