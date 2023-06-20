@@ -168,6 +168,15 @@ These periodic signals could imply variability of the star, eclipsing binaries, 
 %
 %The light curves of all these bright stars are given in \ref{appendix:lightcurves}.
 
+\subsection{Reduction steps in the showyourwork framework}
+
+Raw data is stored in a custom database and retrieved with Python 2.7 scripts on a local computer.
+
+We extract the raw data for each camera and save as a FITS file with the format {\tt <HD number>\_<cameraID>.fits} where {\tt HD number} is the Henry Draper number for the star and {\tt cameraID} is one of the four camera names {\tt AUE,AUW,SAE,SAW}.
+%
+These raw data are written out using the {\tt save\_raw\_data\_from\_bring\_database.py} script.
+%
+The resulting 628 data files are 144 Gb in size and are retrievable from the public repository Zenodo at XXXXXX.
 
 
 \subsection{Stars}
