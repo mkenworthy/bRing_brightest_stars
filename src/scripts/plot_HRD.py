@@ -67,4 +67,4 @@ for i in stars:
     plt.plot(bmag - vmag, absmag, '.', color = 'r')
 
 plt.gca().invert_yaxis()
-plt.show()
+#plt.show()
