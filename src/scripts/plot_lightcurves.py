@@ -1,8 +1,9 @@
 import astropy.io.fits as fits
 import matplotlib.pyplot as plt
 import numpy as np
+import paths
 
-starcat    = fits.getdata('bringcat20191231.fits.gz')
+starcat    = fits.getdata(paths.data / 'bringcat20191231.fits.gz')
 
 nonvariableASCC = [1721367, 1722082, 1728196, 1728326, 1730728, 1748375, 1762319, 1776717, 1781002, 1790528, 1821588, 1822707, 1831780, 1839751, 1862167, 
                    1862828, 1865291, 1867878, 1871021, 1873533, 1875934, 1880579, 1880898, 1881897, 1882798, 1887460, 1901232, 1905964, 1905967, 1907532, 
@@ -27,7 +28,9 @@ def plotLightCurve(star):
     starcatloc = np.where(starcat['ascc'] == str(star))[0][0]
     starinfo = starcat[starcatloc]
     HD = starinfo['HD']    
-    final_data = openfits('FinalData/'+str(HD)+'.fits')
+#    final_data = openfits('FinalData/'+str(HD)+'.fits')
+    fin = str(HD)+'.fits'
+    final_data = openfits(paths.data / fin)
     AUWcam = np.where(final_data['camera'] ==1)
     AUW = final_data[AUWcam]
     AUEcam = np.where(final_data['camera'] ==0)
@@ -42,17 +45,17 @@ def plotLightCurve(star):
 
     fig, axs = plt.subplots(5, figsize = (16.0, 10.0), sharex = True)
     fig.suptitle('ASCC '+ str(star)+ ', HD ' + str(HD))
-    axs[0].plot(SAE['jd'], SAE['mag0'], '.', alpha = 0.1, color = 'red')
-    axs[0].plot(AUE['jd'], AUE['mag0'], '.', alpha = 0.1, color = 'gold')
-    axs[0].plot(SAW['jd'], SAW['mag0'], '.', alpha = 0.1, color = 'turquoise')
-    axs[0].plot(AUW['jd'], AUW['mag0'], '.', alpha = 0.1, color = 'royalblue')
+    axs[0].plot(SAE['jd'], SAE['mag0'], '.', alpha = 0.1, color = 'red', rasterized=True)
+    axs[0].plot(AUE['jd'], AUE['mag0'], '.', alpha = 0.1, color = 'gold', rasterized=True)
+    axs[0].plot(SAW['jd'], SAW['mag0'], '.', alpha = 0.1, color = 'turquoise', rasterized=True)
+    axs[0].plot(AUW['jd'], AUW['mag0'], '.', alpha = 0.1, color = 'royalblue', rasterized=True)
 
     leg = axs[0].legend(['SAE', 'AUE', 'SAW', 'AUW'], bbox_to_anchor = (1, 1))
 
-    axs[1].plot(SAE['jd'], SAE['mag0'], '.', alpha = 0.1, color = 'red')
-    axs[2].plot(AUE['jd'], AUE['mag0'], '.', alpha = 0.1, color = 'gold')
-    axs[3].plot(SAW['jd'], SAW['mag0'], '.', alpha = 0.1, color = 'turquoise')
-    axs[4].plot(AUW['jd'], AUW['mag0'], '.', alpha = 0.1, color = 'royalblue')
+    axs[1].plot(SAE['jd'], SAE['mag0'], '.', alpha = 0.1, color = 'red', rasterized=True)
+    axs[2].plot(AUE['jd'], AUE['mag0'], '.', alpha = 0.1, color = 'gold', rasterized=True)
+    axs[3].plot(SAW['jd'], SAW['mag0'], '.', alpha = 0.1, color = 'turquoise', rasterized=True)
+    axs[4].plot(AUW['jd'], AUW['mag0'], '.', alpha = 0.1, color = 'royalblue', rasterized=True)
 
     axs[0].set(xlabel = " ", ylabel = "Magnitude")
     axs[1].set(xlabel = " ", ylabel = "Magnitude")
@@ -73,7 +76,8 @@ def plotLightCurve(star):
     axs[3].invert_yaxis()
     axs[4].invert_yaxis()
 
-#    plt.savefig(str(HD)+'.png')
+    fout = str(HD)+'.pdf'
+    plt.savefig(paths.figures / fout)
     plt.show()
     plt.close()
 
