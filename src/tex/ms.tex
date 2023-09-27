@@ -62,7 +62,7 @@
 
 
 \begin{document} 
-\authorrunning{Kenworthy et al.}
+\authorrunning{Hoogenboom et al.}
 \titlerunning{Brightest southern star light curves}
 
    \title{Caveat Emptor: Light curves of the brightest stars in the \\ Southern sky as seen by bRing}
@@ -122,19 +122,19 @@ A second problem is the lack of calibration stars of similar brightness on the c
 %
 All sky cameras used for tracking meteors can provide unsaturated photometry of the brightest stars but their small entrance pupil means that they are susceptible to scintillation noise, limiting the photometric precision.
 
-The Beta Pictoris Ring \citep[BRING; ][]{Stuik_2014} project is a network of four cameras in two completely automated observatories designed to provide continuous calibrated photometry of the exoplanet host star Beta Pictoris.
+The Beta Pictoris Ring \citep[bRing; ][]{Stuik_2014} project is a network of four cameras in two completely automated observatories designed to provide continuous calibrated photometry of the exoplanet host star Beta Pictoris.
 %
-The Hill sphere of the gas giant Beta Pictoris b transited the star in 2015--2016, and the BRING observations provided significant upper limits on the presence of circumplanetary material around the planet \citep{Kenworthy21}.
+The Hill sphere of the gas giant Beta Pictoris b transited the star in 2015--2016, and the bRing observations provided significant upper limits on the presence of circumplanetary material around the planet \citep{Kenworthy21}.
 %
-Unsaturated light curves are available up to a magnitude of 4, but the BRING cameras saturate for brighter stars near the zenith.
+Unsaturated light curves are available up to a magnitude of 4, but the bRing cameras saturate for brighter stars near the zenith.
 %
-At higher airmasses the atmospheric extinction allows the brightest stars to become unsaturated, and combined with the all-sky photometric calibration pipeline used for the MASCARA and BRING telescopes, the unsaturated data can be extracted to form light curves covering the duration of the BRING project, currently 2015 to 2022.
+At higher airmasses the atmospheric extinction allows the brightest stars to become unsaturated, and combined with the all-sky photometric calibration pipeline used for the MASCARA and bRing telescopes, the unsaturated data can be extracted to form light curves covering the duration of the bRing project, currently 2015 to 2022.
 
 This paper presents long term photometric light curves for all naked sky stars visible from the Southern hemisphere.
 %
 In Section \ref{sec:obs} we summarise the raw data and initial data pipeline.
 %
-We then discuss the filters we use to remove saturated photometry and to correct for the known systematics in the BRING observatory.
+We then discuss the filters we use to remove saturated photometry and to correct for the known systematics in the bRing observatory.
 %
 In Section \ref{sec:methods}
 
@@ -146,7 +146,7 @@ In Section \ref{sec:methods}
 % %
 % MASCARA uses long exposure times of 6.38 seconds to observe the sky which results in saturation of the pixels for stars with $m_V < 4$.
 % %
-% This changed in 2017 when the $\beta$ Pictoris b Ring project (bRing) \citep{bring} was introduced.
+% This changed in 2017 when the $\beta$ Pictoris b Ring project (bRing) \citep{bRing} was introduced.
 % %
 % The MASCARA and bRing projects both use exposure times of 6.38 s.
 % %
@@ -196,7 +196,7 @@ The primary goal of the two projects also differs: MASCARA was created to search
 %
 The transit took place from April 2017 lasting 300 days until March 2018 \citep{Wang_2016}.
 %
-Because of this period bRing started collecting data on 17 January 2017 \citep{bring} and has continued every clear night since then.
+Because of this period bRing started collecting data on 17 January 2017 \citep{bRing} and has continued every clear night since then.
 
 While observing $\beta$ Pictoris, bRing observes 20000 additional bright stars and uses a custom pipeline to provide photometric calibration for the visible sky that accounts for several systematic effects.
 %
@@ -209,7 +209,7 @@ These data points are calibrated every night by the bRing Control Software and s
 \begin{figure}
     \centering
     \includegraphics[width=0.90\columnwidth]{figures/bRing.jpg}
-    \caption{The bRing instrument. Reprinted from \cite{bring}, figure 5.}
+    \caption{The bRing instrument. Reprinted from \cite{bRing}, figure 5.}
     \label{bRing}
 \end{figure}
 
@@ -230,11 +230,11 @@ The data processing from the observatory to the local computers are detailed in 
 %
 The raw photometric data for each star is stored in a custom database which can be queried and the data retrieved with Python 2.7 scripts.
 %
-Each star is observed with multiple cameras distributed across the two BRING observatories.
+Each star is observed with multiple cameras distributed across the two bRing observatories.
 %
 We extract the raw data for each camera and save as a FITS file with the format {\tt <HD number>\_<cameraID>.fits} where {\tt HD number} is the Henry Draper number for the star and {\tt cameraID} is one of the four camera names {\tt AUE,AUW,SAE,SAW}.
 %
-These raw data are written out using the {\tt save\_raw\_data\_from\_bring\_database.py} script.
+These raw data are written out using the {\tt save\_raw\_data\_from\_bRing\_database.py} script.
 %
 The resulting 628 data files are 144 Gb in size and are retrievable from the public repository Zenodo at XXXXXX.
 
@@ -325,27 +325,15 @@ We cannot use the daily data to remove, for example, the clouds, because those v
     \item The final step was to reject the 5$\sigma$ outliers for the mean of the sky background. %This rejection also results in less background noise.
 \end{itemize}
 
-The impact of each step of the reduction is shown in Figure~\ref{deltaCen1}.
+The impact of each step of the reduction is shown in Figure~\ref{fig:reduction}.
 
-\begin{figure}
+\begin{figure*}
     \centering
-    \includegraphics[width=\textwidth]{figures/delta_Cent_first3.png}
+    \includegraphics[width=\linewidth]{figures/reduction.pdf}
     \caption{The first three steps of the data reduction are shown here. The first plot shows the raw data that was saved by bRing. The second plot shows the data without the long exposures. Lastly, the data without the bad photometry and astrometry flags is plotted. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis.}
-    \label{deltaCen1}
-\end{figure}
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{figures/delta_Cent_second3.png}
-    \caption{This figure shows the next three steps of the data reduction. The first step is to make sure that the magnitude error is always finite and greater than zero. Next, the data where the altitude of the Sun is not below $-18^o$ is removed. In the last plot the 3$\sigma$ outliers on the mean of the cloud error are removed. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis. Note that the magnitude scale is different for the last plot.}
-    \label{deltaCen2}
-\end{figure}
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{figures/delta_Cent_last3.png}
-    \caption{This figure shows the last three steps of the data reduction. First, the 5$\sigma$ outliers of the mean of the magnitude error are removed. In the second plot the 3$\sigma$ outliers on the mean of the cloud are removed. Lastly, the 5$\sigma$ outliers on the sky background are removed. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis. Note that the magnitude scale differs for each plot.}
-    \label{deltaCen3}
-\end{figure}
-
+    \label{fig:reduction}
+    \script{plot_reduction.py}
+\end{figure*}
 
 \subsection{Detrending}
 
@@ -398,36 +386,36 @@ For variable stars with a known period, we removed the large amplitude periodic 
 
 Examples of the detrending steps are shown in the figures below.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{figures/Mimosa_detrend_steps.png}
-    \caption{This figure shows the steps for detrending a non-variable star. The first plot shows the data before detrending.
-    The second plot shows the data after detrending the LSTSEQ. The third plot shows the data after detrending per Julian Date. The final plot shows the data after detrending for the moon. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis.}
-    \label{Mimosa_detrend_steps}
-\end{figure}
-%uitleg over figuren
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{figures/Mimosa_detrending.png}
-    \caption{This figure shows the difference in the light curves before and after detrending. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis.}
-    \label{Mimosa_detrend}
-\end{figure}
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{figures/Mimosa_detrending_zoom.png}
-    \caption{This figure shows the difference in the light curves before and after detrending on a daily scale. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis. The plot is zoomed in on the horizontal axis.}
-    \label{Mimosa_detrend_zoom}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\textwidth]{figures/Mimosa_detrend_steps.png}
+%     \caption{This figure shows the steps for detrending a non-variable star. The first plot shows the data before detrending.
+%     The second plot shows the data after detrending the LSTSEQ. The third plot shows the data after detrending per Julian Date. The final plot shows the data after detrending for the moon. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis.}
+%     \label{Mimosa_detrend_steps}
+% \end{figure}
+% %uitleg over figuren
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\textwidth]{figures/Mimosa_detrending.png}
+%     \caption{This figure shows the difference in the light curves before and after detrending. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis.}
+%     \label{Mimosa_detrend}
+% \end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\textwidth]{figures/Mimosa_detrending_zoom.png}
+%     \caption{This figure shows the difference in the light curves before and after detrending on a daily scale. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis. The plot is zoomed in on the horizontal axis.}
+%     \label{Mimosa_detrend_zoom}
+% \end{figure}
 
 After detrending we bin the data to make the light curves appear more smooth. Bins of 50 data points are used, to resemble the binning of the quarterly data. Binning is conducted based on LSTSEQ, which keeps count of the possible 13500 exposures per day. This means that if two data points were taken at very different times (for example, at the end of a day and at the beginning of the next day), these points will not be put into the same bin. For every 50 points, the mean magnitude is computed. This mean magnitude is inserted at the mean time interval of the data points.
 
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{figures/Mimosa_bin.png}
-    \caption{This figure shows the detrended data of a star before and after binning. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis.}
-    \label{Mimosa_bin}
-\end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\textwidth]{figures/Mimosa_bin.png}
+%     \caption{This figure shows the detrended data of a star before and after binning. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis.}
+%     \label{Mimosa_bin}
+% \end{figure}
 
 % \section{Searching for periodic signals}
 % \label{sec:tlslomb}
@@ -536,21 +524,29 @@ Two interesting variable stars.
 % \end{figure}
 % \end{enumerate}
 
-Two stars are very close to the Sun in the HR diagram in \ref{HRD}. These stars are delta Pavonis and Beta Hydri. Delta Pavonis has a luminosity of 1.22 L$_\odot$ \citep{Bruntt_2010}, a mass of 0.991 M$_\odot$ and a radius of 1.22 R$_\odot$ \citep{2008yCat..21680297T}. It is a subgiant star which will relatively soon start to become a red giant. Beta Hydri has a luminosity of 3.49 L$_\odot$, a mass of 1.08 M$_\odot$ and a of radius 1.81 R$_\odot$ \citep{Brand_o_2011}. Beta Hydri is also a subgiant star. 
+Two stars are very close to the Sun in the HR diagram in \ref{HRD}. These stars are delta Pavonis and Beta Hydri.
+%
+Delta Pavonis has a luminosity of 1.22 L$_\odot$ \citep{Bruntt_2010}, a mass of 0.991 M$_\odot$ and a radius of 1.22 R$_\odot$ \citep{2008yCat..21680297T}.
+%
+It is a subgiant star which will relatively soon start to become a red giant.
+%
+Beta Hydri has a luminosity of 3.49 L$_\odot$, a mass of 1.08 M$_\odot$ and a of radius 1.81 R$_\odot$ \citep{Brand_o_2011}.
+%
+Beta Hydri is also a subgiant star. 
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth]{figures/del_Pav_thesis.png}
+    \includegraphics[width=\linewidth]{figures/del_Pav_thesis.png}
     \caption{Light curve of delta Pavonis after data reduction and detrending. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis. The ASCC-number of delta Pavonis is 2424942.}
     \label{del_Pav}
 \end{figure}
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{figures/bet_Hyi_thesis.png}
-    \caption{Light curve of beta Hydri after data reduction and detrending. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis. The ASCC-number of beta Hydri is 2430714.}
-    \label{bet_Hyi}
-  \end{figure}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\textwidth]{figures/bet_Hyi_thesis.png}
+%     \caption{Light curve of beta Hydri after data reduction and detrending. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis. The ASCC-number of beta Hydri is 2430714.}
+%     \label{bet_Hyi}
+%   \end{figure}
 
 
   
@@ -616,7 +612,7 @@ No detrending was conducted for the sidereal period of the moon, which is about 
 
 
 % \subsection{Results}
-% The BRing User Reduction Pipeline (BURP) was created by Remko Stuik to calibrate data of stars observed by the bRing cameras. Using \texttt{burp.detrend}, the data is calibrated and light curves are made. However, BURP does not create proper light curves of stars with $m_V < 4$. A comparison between a light curve created with our calibration and \texttt{burp.detrend} is shown in \ref{burp}. A large amount of scattered data points is still visible in the second plot, particularly below the average magnitude. This means that there are still steps of the data reduction which need to be performed to remove these.
+% The bRing User Reduction Pipeline (BURP) was created by Remko Stuik to calibrate data of stars observed by the bRing cameras. Using \texttt{burp.detrend}, the data is calibrated and light curves are made. However, BURP does not create proper light curves of stars with $m_V < 4$. A comparison between a light curve created with our calibration and \texttt{burp.detrend} is shown in \ref{burp}. A large amount of scattered data points is still visible in the second plot, particularly below the average magnitude. This means that there are still steps of the data reduction which need to be performed to remove these.
 % %
 % In \ref{burpzoom} the light curves are displayed on a daily scale. The values of the vertical axes do not correspond, but the relative scale does. The \texttt{burp.detrend} plot displays a wider range of magnitude compared to the first plot. This range could be visible because the removal of trends during the detrending process is not executed properly for these stars. These figures show that the calibration of light curves is possible if the calibration is conducted differently, as described in \ref{sec:methods}. 
 
