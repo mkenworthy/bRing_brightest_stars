@@ -23,15 +23,16 @@ dag:
   #  - src/tex/orcid-ID.png
 
 
-# Externally-hosted datasets, e.g. on Zenodo
-datasets:
-  10.5072/zenodo.1214029:
-    contents:
-      HD_84810_raw.zip: 
-        84810_AUE.fits: src/data/84810_AUE.fits
-        84810_AUW.fits: src/data/84810_AUW.fits
-        84810_SAE.fits: src/data/84810_SAE.fits
-        84810_SAW.fits: src/data/84810_SAW.fits
+# commented out since zandbox is down (27 sep)
+# # Externally-hosted datasets, e.g. on Zenodo
+# datasets:
+#   10.5072/zenodo.1214029:
+#     contents:
+#       HD_84810_raw.zip: 
+#         84810_AUE.fits: src/data/84810_AUE.fits
+#         84810_AUW.fits: src/data/84810_AUW.fits
+#         84810_SAE.fits: src/data/84810_SAE.fits
+#         84810_SAW.fits: src/data/84810_SAW.fits
 
 # Custom file dependencies
 dependencies:
