@@ -69,6 +69,6 @@ axs[5].invert_yaxis()
 fig.suptitle('ASCC '+ str(star)+ ', HD ' + str(HD))
 plt.draw()
 plt.savefig(paths.figures / 'reduction.pdf')
-plt.show()
+#plt.show()
 
 
