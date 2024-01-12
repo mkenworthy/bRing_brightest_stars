@@ -13,6 +13,14 @@
 \usepackage{hyperref}
 \hypersetup{colorlinks=true,allcolors=[rgb]{0,0,0.8}}
 
+% added to hide columns in the tables
+\usepackage{array}
+\newcolumntype{H}{>{\setbox0=\hbox\bgroup}c<{\egroup}@{}}
+
+\usepackage{appendix}
+
+% align columns in table
+\usepackage{makecell}
 
 \usepackage{showyourwork}
 
@@ -100,7 +108,7 @@
   % {} leave it empty if necessary  
    {The brightest stars in the sky are also amongst the most difficult to obtain long-term precision photometry. }
   % aims heading (mandatory)
-   {We provide high cadence light curves with an individual photometric precision of 0.5\% for 154 stars in the Southern hemisphere from the bRing robotic observatories.}
+   {We provide high cadence light curves with an individual photometric precision of 0.5\% for 157 stars in the Southern hemisphere from the bRing robotic observatories.}
   % methods heading (mandatory)
    {We process the bRing images and remove the systematic trends due to the large pixel sizes, the varying night sky background, cloud coverage and intrapixel variations, in addition to diurnal, synodic and seasonal variations.}
   % results heading (mandatory)
@@ -299,31 +307,28 @@ We started the data reduction by selecting good data points from the daily and q
 \begin{enumerate}
     \item All data points from the eastern Australian camera on 3 and 4 April 2018 and the eastern South African camera on 10 September 2020 were discarded due to significant outliers of unknown origin.
     \item The 2.35 second exposures were used.
+    %\item The data points where the cloud error was 3$\sigma$ above the mean cloud error were deleted.
+    %
+    %The 3$\sigma$ cutoff was estimated by eye.
+    %
+    %The cloud error tells us how the transmission changes over time; a big change might mean a cloud is in view.
+    %
+    %These outliers usually indicate that the clouds are variable at that point in time, in which case the data should not be used.
+    \item The 3$\sigma$ outliers of the clouds were removed. %This results in less background noise.
+    \item The 5$\sigma$ outliers of the sky background were rejected. %This rejection also results in less background noise.
+    \item The 5$\sigma$ outliers based on magnitude error were discarded. %A big error could mean that the measurement is wrong.     
+    \item All data where the Sun is lower than $-18\degr$ was selected. %This was added to ensure that the sky background did not get too bright.     
+    \item We made sure that the magnitude error for the daily data is always greater than zero and finite, so no incorrect values are encountered. 
     \item We used the astrometry and photometry flags of the daily data. 
     %
     These tell us if the measured flux is too high or too low to be realistic or if no photometry was performed due to, e.g., the star being too close to the edge of the image.
     %
     Only the data without any bad flags was used. 
-    \item We made sure that the magnitude error for the daily data is always greater than zero and finite, so no incorrect values are encountered. 
-    \item All data where the Sun is lower than $-18\degr$ was selected. %This was added to ensure that the sky background did not get too bright. 
-    \item The data points where the cloud error was 3$\sigma$ above the mean cloud error were deleted.
-    %
-    The 3$\sigma$ cutoff was estimated by eye.
-    %
-    The cloud error tells us how the transmission changes over time; a big change might mean a cloud is in view.
-    %
-    These outliers usually indicate that the clouds are variable at that point in time, in which case the data should not be used.
 \end{enumerate}
 
 After selecting the data points that pass all these steps in both the daily and quarterly data, the daily data was calibrated.
 %
 We cannot use the daily data to remove, for example, the clouds, because those values are only available in the quarterly data, so the missing information was copied from the quarterly data to the daily data. 
-
-\begin{itemize}
-    \item The 5$\sigma$ outliers based on magnitude error were discarded. %A big error could mean that the measurement is wrong. 
-    \item The 3$\sigma$ outliers for the mean of the clouds were also removed. %This results in less background noise.
-    \item The final step was to reject the 5$\sigma$ outliers for the mean of the sky background. %This rejection also results in less background noise.
-\end{itemize}
 
 The impact of each step of the reduction is shown in Figure~\ref{fig:reduction}.
 
@@ -374,18 +379,15 @@ The mean was then subtracted from all data points in one bin.
 
 The last trend we removed is the one caused by the moon, which changes the sky background.
 %
-Trends matched to the synodic period (29.5305 days) were fitted and removed.
+Trends matched to the synodic period (29.5306 days) were fitted and removed.
 %
-%The synodic period of the moon\footnote{The synodic period of the moon is 29.530588853 days.} and 25 bins per day were used to find a sigma-clipped mean per bin. This mean was subtracted from the data points in the bin. 
-
-%For each step in the detrending process, the offsets calculated in the previous step were added.
-
 At this stage, the light curve for each star has all known trends removed.
-
-For variable stars with a known period, we removed the large amplitude periodic variations before carrying out the detrending listed ablove, and then added this offset back into the light curve after the reduction steps.
-
+%
+For variable stars with a known period, we removed the large amplitude periodic variations before carrying out the detrending listed above, and then added this offset back into the light curve after the reduction steps.
+%
 Examples of the detrending steps are shown in the figures below.
 
+XXXX wait for detrendsteps_plot.py
 
 \begin{figure*}
     \centering
@@ -397,54 +399,28 @@ Examples of the detrending steps are shown in the figures below.
     \script{plot_lightcurves.py}
 \end{figure*}
 
-
-
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=\textwidth]{figures/Mimosa_detrend_steps.png}
-%     \caption{This figure shows the steps for detrending a non-variable star. The first plot shows the data before detrending.
-%     The second plot shows the data after detrending the LSTSEQ. The third plot shows the data after detrending per Julian Date. The final plot shows the data after detrending for the moon. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis.}
-%     \label{Mimosa_detrend_steps}
-% \end{figure}
-% %uitleg over figuren
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=\textwidth]{figures/Mimosa_detrending.png}
-%     \caption{This figure shows the difference in the light curves before and after detrending. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis.}
-%     \label{Mimosa_detrend}
-% \end{figure}
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=\textwidth]{figures/Mimosa_detrending_zoom.png}
-%     \caption{This figure shows the difference in the light curves before and after detrending on a daily scale. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis. The plot is zoomed in on the horizontal axis.}
-%     \label{Mimosa_detrend_zoom}
-% \end{figure}
-
-After detrending we bin the data to make the light curves appear more smooth. Bins of 50 data points are used, to resemble the binning of the quarterly data. Binning is conducted based on LSTSEQ, which keeps count of the possible 13500 exposures per day. This means that if two data points were taken at very different times (for example, at the end of a day and at the beginning of the next day), these points will not be put into the same bin. For every 50 points, the mean magnitude is computed. This mean magnitude is inserted at the mean time interval of the data points.
-
-
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=\textwidth]{figures/Mimosa_bin.png}
-%     \caption{This figure shows the detrended data of a star before and after binning. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis.}
-%     \label{Mimosa_bin}
-% \end{figure}
-
-% \section{Searching for periodic signals}
-% \label{sec:tlslomb}
-
-% Using the cleaned light curves, a search for periodic signals can be done.
-% %
-% Two methods were used for this. The Transit Least Squares algorithm was used to find transits in the light curves and the Lomb-Scargle periodograms were used to find sinusoidal periodic signals in the data.
-
-% Once a signal was found, a period fold was used to determine the validity of the signal. Using a period fold, the shape of the periodic behaviour can be found.
-
 \section{Results}
 \label{sec:results}
-% Using the bRing cameras, the 157 brightest stars ($m_V < 4$) in the southern hemisphere were observed. After performing data reduction, the trends caused by external effects in the data were removed. This process is called detrending. We removed two daily trends and the monthly trend caused by the moon. After this, light curves of these stars were generated. Finally, periodic signals could be found using these light curves. If these signals appeared to be transits or eclipses, the Transit Least Squares algorithm \citep{Hippke_2019} was applied. For variable stars such as pulsating or rotating stars, Lomb-Scargle periodograms \citep{VanderPlas_2012} \citep{VanderPlas_2015} were used. 
 
 \subsection{Representative light curves}
 The light curves of the several brightest stars on the southern hemisphere are presented.
+
+XXX in a Rosa email what are the numbers
+
+message://%3c1131158490.6158.1695733941581@mail.ziggo.nl%3e
+
+I believe the HR-diagram was indeed made with Gaia data.
+
+In order to make the plots in the ``Representative light curves'' section, we could use the makelightcurve.py script that we shared before. You will only have to alter the number all the way at the bottom of the script in "plotLightCurve", which has to be the ASCC number of the star that you want to plot.
+
+These are the stars and their ASCC numbers that you requested:
+
+The brightest star we have: Canopus: ASCC 2111805
+Delta Pavonis: ASCC 2424942
+Two interesting variable stars: zeta Phoenicis, eclipsing binary: ASCC 2198437
+and l Carinae, cepheid: ASCC 2311128
+
+Attached are the code for the reduction-steps plot and the HR-diagram.
 
 The brightest star you have.
 
@@ -452,9 +428,7 @@ Delta Pavonis.
 
 Two interesting variable stars.
 
-
-
-% \begin{enumerate}
+%\begin{enumerate}
 % \item \ref{Canopus} shows the light curve of alpha Carinae, the second brightest star in the sky and the brightest star in the southern hemisphere. It is better known as Canopus. The light curve can be seen in.
 % \item \ref{Rigil_Kentaurus} shows the light curve of alpha Centauri A, the third brightest stars in the sky. It is also known as Rigil Kentaurus. It is part of the alpha Centauri system, which contains Proxima Centauri, the closest star known to the Sun. 
 % \item \ref{Achernar} presents the light curve of alpha Eridani, also known as Achernar.
@@ -537,7 +511,9 @@ Two interesting variable stars.
 % \end{figure}
 % \end{enumerate}
 
-Two stars are very close to the Sun in the HR diagram in \ref{HRD}. These stars are delta Pavonis and Beta Hydri.
+Two stars are very close to the Sun in the HR diagram in \ref{HRD}.
+%
+These stars are delta Pavonis and Beta Hydri.
 %
 Delta Pavonis has a luminosity of 1.22 L$_\odot$ \citep{Bruntt_2010}, a mass of 0.991 M$_\odot$ and a radius of 1.22 R$_\odot$ \citep{2008yCat..21680297T}.
 %
@@ -561,14 +537,20 @@ Beta Hydri is also a subgiant star.
 %     \label{bet_Hyi}
 %   \end{figure}
 
-
-  
 \section{Discussion}
+
 \label{sec:discussion}
 
-157 light curves of the brightest stars ($m_V < 4$) in the southern hemisphere ($\delta \leq -30^o$) were created. This is the first time light curves have been produced for such bright stars. We discuss our results in the subsections below. Limitations and strengths of the methods used are given as well.
+157 light curves of the brightest stars ($m_V < 4$) in the southern hemisphere ($\delta \leq -30^o$) were created.
+%
+This is the first time light curves have been produced for such bright stars.
+%
+We discuss our results in the subsections below. 
+%
+Limitations and strengths of the methods used are given as well.
 
 \subsection{Data reduction}
+
 \label{sec:discdatared}
 % The data reduction still has a few shortcomings.
 
@@ -591,7 +573,11 @@ Beta Hydri is also a subgiant star.
 % Furthermore, for the eastern Australian camera, the magnitude of some stars reaches values around $10^{19}$ or higher on one day, which are clearly too extreme. This could be caused by some error in the measurements. The scattering is reduced by removing the 100$\sigma$ magnitude outliers. This high value is chosen, because a smaller value would remove some of the good data points. 
 
 
-Intrapixel variations were neglected in the data reduction. These quasi-sinusoidal modulations are caused by the interline design of the CCDs \citep{Talens_2018}. The intrapixel variations cause noise in the light curves, but are too complex to remove in this research.
+Intrapixel variations were neglected in the data reduction.
+%
+These quasi-sinusoidal modulations are caused by the interline design of the CCDs \citep{Talens_2018}.
+%
+The intrapixel variations cause noise in the light curves, but are too complex to remove in this research.
 
 % The brightest stars which are visible high in the sky have less data points in general. The data at the beginning and end of the night is sufficient to use in the light curves, but the data in the middle of the night cannot be used. These data points are usually saturated, because the star is at its brightest when it is positioned high in the sky.
 
@@ -599,15 +585,41 @@ Intrapixel variations were neglected in the data reduction. These quasi-sinusoid
 
 \subsection{Periodic and variable stars}
 
-After detrending the calibrated data, the mean magnitude of the stars is zero. For variable stars this is prevented by adding the offset of the period back into the detrended data. To fix the mean for the stars which are not variable, the mean should be calculated from the data after data reduction is completed, but before detrending is performed. This mean should then be added to the detrended data. However, calculating the mean from the calibrated data does not return the most accurate magnitude value, because of the values from the bRing database mentioned in \ref{sec:discdatared}.
+After detrending the calibrated data, the mean magnitude of the stars is zero.
+%
+For variable stars this is prevented by adding the offset of the period back into the detrended data.
+%
+To fix the mean for the stars which are not variable, the mean should be calculated from the data after data reduction is completed, but before detrending is performed.
+%
+This mean should then be added to the detrended data.
+%
+However, calculating the mean from the calibrated data does not return the most accurate magnitude value, because of the values from the bRing database mentioned in \ref{sec:discdatared}.
 
-Stars with no known periods were assumed to be non-variable stars and detrended as such. Possible undiscovered periods can be found by using the data available before detrending.
+Stars with no known periods were assumed to be non-variable stars and detrended as such.
 %
-Variable stars with a period longer than 500 days were not detrended for their period. If an eclipse is visible in the light curve, it can only show up for a maximum of one time, which means detrending would not have an effect.
+Possible undiscovered periods can be found by using the data available before detrending.
 %
-Pulsating stars with a period below one day were also detrended as non-variable stars. These short periods of a few hours are not visible in the Lomb-Scargle periodograms. The true period could be dominated by systematic effects within one day which cause stronger signals. This is because after detrending, periodic signals of a fraction of a day still remain. Periodic signals of a multiple of one day still remain as well. These signals should be handled carefully when searching for variability in a light curve.
+Variable stars with a period longer than 500 days were not detrended for their period.
 %
-No detrending was conducted for the sidereal period of the moon, which is about 27.3 days. This peak is very rarely observed in periodograms. If this peak is still found, it should be treated especially carefully, because we did not remove this signal in the detrending process.
+If an eclipse is visible in the light curve, it can only show up for a maximum of one time, which means detrending would not have an effect.
+%
+Pulsating stars with a period below one day were also detrended as non-variable stars.
+%
+These short periods of a few hours are not visible in the Lomb-Scargle periodograms.
+%
+The true period could be dominated by systematic effects within one day which cause stronger signals.
+%
+This is because after detrending, periodic signals of a fraction of a day still remain.
+%
+Periodic signals of a multiple of one day still remain as well.
+%
+These signals should be handled carefully when searching for variability in a light curve.
+%
+No detrending was conducted for the sidereal period of the moon, which is about 27.3 days.
+%
+This peak is very rarely observed in periodograms.
+%
+If this peak is still found, it should be treated especially carefully, because we did not remove this signal in the detrending process.
 
 % \subsection{Searching for periodic signals}
 % Periodograms could not be made for all 157 stars, because this process takes a long time. This means that undiscovered periodic signals may still remain in the light curves.
@@ -643,9 +655,9 @@ No detrending was conducted for the sidereal period of the moon, which is about 
 %     \label{burpzoom}
 % \end{figure}
 
-The light curves of the two brightest stars in our data set, Canopus (\ref{Canopus}) and Rigil Kentaurus (\ref{Rigil_Kentaurus}), contain bright peaks of scattered data points. This could be the result of overcorrecting the data affected by clouds, since these peaks occur mostly at very cloudy days.
+%The light curves of the two brightest stars in our data set, Canopus (\ref{Canopus}) and Rigil Kentaurus (\ref{Rigil_Kentaurus}), contain bright peaks of scattered data points. This could be the result of overcorrecting the data affected by clouds, since these peaks occur mostly at very cloudy days.
 
-In the light curve of Hadar (\ref{Hadar}) the brightness seems to fade at the end of a block of data, directly before the star is not visible for a few months. This dip in brightness is probably caused by a lack of calibration. For several stars, it seems the first and last few days of data should be removed because of this inaccuracy.
+%In the light curve of Hadar (\ref{Hadar}) the brightness seems to fade at the end of a block of data, directly before the star is not visible for a few months. This dip in brightness is probably caused by a lack of calibration. For several stars, it seems the first and last few days of data should be removed because of this inaccuracy.
 
 
 
@@ -659,43 +671,32 @@ In the light curve of Hadar (\ref{Hadar}) the brightness seems to fade at the en
 %The period folds of both l Carinae (\ref{l_Car_fold}) and delta Velorum (\ref{del_Vel_fold}) show that longer periods can be detected in the data measured by the bRing instrument. This was not possible for stars brighter than magnitude 4 before bRing was introduced, because not enough data existed of these stars. As a consequence, no long periods could be detected without bRing.
 
 \subsection{Future research}
-In the future, the data reduction of the bright stars should be perfected. There are still a few errors in the data which should be fixed. For example, some invalid values remain.
 
-The bRing cameras collect new raw data every day. This means that more calibration will be needed to polish the data collected after this research.
+In the future, the data reduction of the bright stars should be perfected.
+%
+There are still a few errors in the data which should be fixed.
+%
+For example, some invalid values remain.
 
-For the first time, long-term light curves have been made for stars brighter than magnitude 4. The light curves produced in this research can be used to determine variability in bright stars' emission by searching for periodic signals. The periodic signals discovered in the bRing data can be studied in more detail using different telescopes.
+For the first time, long-term light curves have been made for stars brighter than magnitude 4.
+%
+The light curves produced in this research can be used to determine variability in bright stars' emission by searching for periodic signals, which can then be matched up with other observations.
+%
+%The periodic signals discovered in the bRing data can be studied in more detail using different telescopes.
 
-Furthermore, the shapes of the periods of variable stars brighter than magnitude 4 can now be made visible in a period folded light curve. This could tell us more about the properties of these variable stars.
-
-Moreover, fake transit signals could be inserted in the light curves to determine the boundary conditions of a detectable exoplanet. 
-
-
-
-\section{Conclusion}
-\label{sec:conclusion}
-For the first time, long-term light curves for the 157 brightest stars ($m_V < 4$) in the southern hemisphere ($\delta \leq -30^o$) were created.
-The data was collected by the bRing cameras, after which data reduction and detrending was applied. After the calibration, a search for periodic signals in the light curves was conducted. For six variable stars, the periods were found: 
-\begin{itemize}
-    \item Beta Doradus, a Delta Cephei with a period of $9.84 \pm 0.09$ days.
-    \item Zeta Phoenicis, an eclipsing binary with a period of $1.670 \pm 0.002$ days.
-    \item Alpha Doradus, a rotating star with a period of $2.943 \pm 0.008$ days.
-    \item L Carinae, a Delta Cephei with a period of $35.6 \pm 1.2$ days.
-    \item Mu$^1$ Scorpii, a Beta Lyrae-type eclipsing binary with a period of $1.446 \pm 0.002$ days.
-    \item Delta Velorum, an eclipsing binary with a period of $45.2 \pm 2.0$ days.
-\end{itemize}
-The light curves are most suitable for finding variability in the stars' emissions, especially for long periods ($>$ 1 day). The light curves produced in this research could lead to the discovery of exoplanets or stellar companions around the brightest stars in the sky.
-
+The shapes of the periods of variable stars brighter than magnitude 4 can now be made visible in a period folded light curve.
 
 \section{Conclusions}
 
-   \begin{enumerate}
-      \item asdf
-      \item asdf
-   \end{enumerate}
+\label{sec:conclusion}
 
-
-
-
+We have produced detrended light curves for 157 stars $(M_V<4)$ that are visible from the Southern bRing stations ($\delta \leq -30^o$).
+%
+These light curves cover over seven years of high cadence photometry, enabling frequency domain studies over seven decades of timescales.
+%
+The light curves are suitable for pulsational studies and several time domain cases.
+%
+All data and data reduction scripts are available online.
 
 \begin{acknowledgements}
 
@@ -715,5 +716,208 @@ VOSA has been partially updated by using funding from the European Union's Horiz
 
 \bibliographystyle{aa}
 \bibliography{bib}
+
+\begin{appendix}
+In the table below, the following information is given for all 157 stars, from left to right: ASCC- number, HD identifier, V-magnitude according to the bRing catalogue, and the period which was used for detrending in days. The stars are ordered by ASCC-number.
+\newpage
+\begin{table*}[h]
+\centering
+\begin{tabular}{|l|l|l|l|HHHHl|}
+\hline
+\textbf{ASCC}    & \textbf{HD}    & \textbf{Names} & \boldmath$m_V$  & \textbf{AUW}    & \textbf{AUE}    & \textbf{SAW}    & \textbf{SAE}   & \textbf{Period}     \\ \hline
+\hline
+1721367 & 27376 & upsilon$^4$ Eridani & 3.546 & 42029 & 71155 & 33430 & 77722 & - \\ \hline 
+1722082 & 29291 & \makecell[l]{Theemin,\\ upsilon$^2$ Eridani}  & 3.805 & 19570 & 1873 & 15334 & 25559 & - \\ \hline 
+1728196 & 44402 & \makecell[l]{Furud,\\ zeta Canis Majoris}  & 3.009 & 26425 & 4937 & 18505 & 25486 & - \\ \hline 
+1728326 & 44762 & delta Columbae & 3.841 & 47741 & 42160 & 30414 & 57096 & - \\ \hline 
+1730728 & 50013 & kappa Canis Majoris & 3.516 & 45017 & 37468 & 28910 & 54554 & - \\ \hline 
+1748375 & 74575 & alpha Pyxidis & 3.68 & 43115 & 41415 & 41515 & 51432 & - \\ \hline 
+1762319 & 100407 & xi Hydrae & 3.535 & 35249 & 18853 & 43602 & 43095 & - \\ \hline 
+1776717 & 141556 & chi Lupi & 3.956 & 44910 & 70143 & 74660 & 67749 & - \\ \hline 
+1781002 & 151680 & \makecell[l]{Larawag,\\ epsilon Scorpii} & 2.259 & 34210 & 45114 & 59976 & 54262 & - \\ \hline 
+1790528 & 165135 & \makecell[l]{Alnasl,\\ gamma$^2$ Sagittarii} & 3.239 & 22639 & 11112 & 38527 & 32720 & - \\ \hline 
+1821588 & 36597 & epsilon Columbae & 3.862 & 63601 & 95234 & 48186 & 91536 & - \\ \hline 
+1822707 & 39425 & \makecell[l]{Wazn,\\ beta Columbae} & 3.105 & 70354 & 99644 & 54385 & 103205 & - \\ \hline 
+1831780 & 63032 & c Puppis & 3.621 & 95254 & 120484 & 172314 & 137767 & - \\ \hline 
+1839751 & 74006 & beta Pyxidis & 3.96 & 67463 & 81382 & 74510 & 92615 & - \\ \hline 
+1862167 & 115892 & iota Centauri & 2.743 & 73709 & 106510 & 141952 & 113897 & - \\ \hline 
+1862828 & 117440 & d Centauri & 3.232 & 82682 & 124294 & 166321 & 142042 & - \\ \hline 
+1865291 & 123139 & \makecell[l]{Menkent,\\ theta Centauri} & 2.058 & 71728 & 109034 & 114756 & 108006 & - \\ \hline 
+1867878 & 129116 & beta Centauri & 3.99 & 84913 & 132249 & 219105 & 146755 & - \\ \hline 
+1871021 & 136422 & phi$^1$ Lupi & 3.568 & 67560 & 111915 & 135354 & 110184 & - \\ \hline 
+1873533 & 143118 & eta Lupi & 3.414 & 87890 & 150376 & 237593 & 155971 & - \\ \hline 
+1875903 & 151890 & \makecell[l]{Xamidimura,\\ mu$^1$ Scorpii} & 2.993 & 80328 & 151181 & 207641 & 144973 & 1.44626907 \\ \hline 
+1875934 & 151985 & \makecell[l]{Pipirima,\\ mu$^2$ Scorpii} & 3.548 & 80034 & 150489 & 204726 & 144387 & - \\ \hline 
+1880579 & 158408 & \makecell[l]{Lesath,\\ upsilon Scorpii} & 2.674 & 69112 & 134756 & 149201 & 122917 & - \\ \hline 
+1880898 & 158926 & \makecell[l]{Shaula,\\ lambda Scorpii} & 1.623 & 58209 & 114228 & 81739 & 129014 & - \\ \hline 
+1881897 & 160578 & kappa Scorpii & 2.381 & 86734 & 190031 & 182930 & 168445 & - \\ \hline 
+1882798 & 161892 & \makecell[l]{Fuyue,\\ G Scorpii} & 3.183 & 64900 & 138398 & 147147 & 129589 & - \\ \hline 
+1887460 & 167618 & eta Sagittarii & 3.131 & 60904 & 133603 & 123343 & 122620 & - \\ \hline 
+1901232 & 207971 & \makecell[l]{Aldhanab,\\ gamma Gruis} & 3.003 & 58252 & 128824 & 94915 & 126457 & - \\ \hline 
+1905964 & 2262 & kappa Phoenicis & 3.871 & 130543 & 275229 & 136936 & 334749 & - \\ \hline 
+1905967 & 2261 & \makecell[l]{Ankaa,\\ alpha Phoenicis} & 2.391 & 125364 & 261656 & 126294 & 337648 & - \\ \hline 
+1907532 & 9053 & gamma Phoenicis & 3.44 & 134345 & 278078 & 119534 & 377143 & - \\ \hline 
+1909803 & 18622 & theta$^1$ Eridani & 3.211 & 57635 & 126153 & 55993 & 138132 & - \\ \hline 
+1911993 & 26967 & alpha Horologii & 3.854 & 151370 & 255602 & 115967 & 360956 & - \\ \hline 
+1923547 & 59717 & \makecell[l]{Hadir,\\ sigma Puppis} & 3.26 & 171044 & 231000 & 170738 & 334356 & - \\ \hline 
+1925996 & 64440 & a Puppis & 3.709 & 163970 & 218126 & 170931 & 210093 & - \\ \hline 
+\end{tabular}
+\end{table*}
+
+\newpage
+
+\begin{table*}[h]
+\centering
+\begin{tabular}{|l|l|l|l|HHHHl|}
+\hline
+\textbf{ASCC}    & \textbf{HD}    & \textbf{Names} & \boldmath$m_V$  & \textbf{AUW}    & \textbf{AUE}    & \textbf{SAW}    & \textbf{SAE}   & \textbf{Period}     \\ \hline
+\hline
+1927667 & 66811 & \makecell[l]{Naos,\\ zeta Puppis} & 2.217 & 115762 & 217775 & 123059 & 186477 & - \\ \hline 
+1936013 & 78647 & \makecell[l]{Suhail,\\ lambda Velorum} & 2.21 & 134666 & 193189 & 162463 & 334359 & - \\ \hline 
+1938697 & 82434 & psi Velorum & 3.582 & 158426 & 201176 & 217702 & 201720 & - \\ \hline 
+1943462 & 88955 & q Velorum & 3.832 & 173251 & 199234 & 227958 & 305305 & - \\ \hline 
+1959119 & 120307 & nu Centauri & 3.397 & 167311 & 208245 & 262723 & 291221 & - \\ \hline 
+1959126 & 120324 & mu Centauri & 3.46 & 171644 & 212955 & 267756 & 339768 & - \\ \hline 
+1959843 & 121743 & phi Centauri & 3.811 & 167053 & 214406 & 262361 & 340358 & - \\ \hline 
+1959875 & 121790 & upsilon$^1$ Centauri & 3.848 & 181713 & 229943 & 277109 & 365521 & - \\ \hline 
+1962822 & 127972 & eta Centauri & 2.328 & 145080 & 194372 & 183128 & 339904 & - \\ \hline 
+1964703 & 132058 & beta Lupi & 2.668 & 164615 & 206248 & 221732 & 354055 & - \\ \hline 
+1967127 & 136298 & delta Lupi & 3.206 & 152168 & 205969 & 244678 & 235667 & - \\ \hline 
+1967246 & 136504 & epsilon Lupi & 3.369 & 176363 & 240548 & 274742 & 377785 & - \\ \hline 
+1968585 & 138690 & gamma Lupi & 2.812 & 153114 & 217706 & 231582 & 261977 & - \\ \hline 
+1974877 & 152334 & zeta$^1$ Scorpii & 3.608 & 153031 & 246511 & 226171 & 319588 & - \\ \hline 
+1976808 & 155203 & eta Scorpii & 3.315 & 153548 & 264762 & 241674 & 393034 & - \\ \hline 
+1980004 & 159532 & \makecell[l]{Sargas,\\ theta Scorpii} & 1.851 & 96750 & 157836 & 127172 & 383352 & - \\ \hline 
+1981329 & 161471 & iota$^1$ Scorpii & 3.005 & 111101 & 242913 & 219947 & 224807 & - \\ \hline 
+1992514 & 181454 & \makecell[l]{Arkab Prior,\\ beta$^1$ Sagittarii} & 3.953 & 149254 & 275843 & 224579 & 357822 & - \\ \hline 
+1992594 & 181869 & \makecell[l]{Rukbat,\\ alpha Sagittarii} & 3.95 & 122340 & 243233 & 194315 & 242710 & - \\ \hline 
+2000576 & 213009 & delta$^1$ Gruis & 3.959 & 133316 & 271688 & 168182 & 356114 & - \\ \hline 
+2003304 & 496 & epsilon Phoenicis & 3.875 & 129175 & 286752 & 135224 & 347961 & - \\ \hline 
+2004703 & 6595 & beta Phoenicis & 3.315 & 148123 & 303550 & 147342 & 418886 & - \\ \hline 
+2005323 & 9362 & delta Phoenicis & 3.937 & 149132 & 309775 & 155544 & 434821 & - \\ \hline 
+2021081 & 63922 & P Puppis & 3.941 & 191324 & 241883 & 204760 & 375992 & - \\ \hline 
+2023562 & 68273 & gamma$^2$ Velorum & 1.812 & 91755 & 180554 & 88358 & 407483 & - \\ \hline 
+2027459 & 74180 & b Velorum & 3.808 & 200293 & 246277 & 223264 & 379316 & - \\ \hline 
+2028223 & 75063 & a Velorum & 3.89 & 200295 & 236193 & 243967 & 371324 & - \\ \hline 
+2030506 & 78004 & c Velorum & 3.743 & 200714 & 253268 & 241167 & 394426 & - \\ \hline 
+2040152 & 92139 & p Velorum & 3.832 & 211973 & 248356 & 277991 & 395668 & - \\ \hline 
+2041127 & 93497 & mu Velorum & 2.709 & 191569 & 242702 & 259890 & 400629 & - \\ \hline 
+2050494 & 109787 & tau Centauri & 3.845 & 199681 & 246063 & 292914 & 403599 & - \\ \hline 
+2050813 & 110304 & gamma Centauri & 2.421 & 108758 & 169885 & 129350 & 378054 & - \\ \hline 
+2056697 & 121263 & zeta Centauri & 2.523 & 155149 & 212851 & 217055 & 380046 & - \\ \hline 
+2058847 & 125238 & iota Lupi & 3.542 & 188185 & 246938 & 299346 & 399890 & - \\ \hline 
+2061037 & 129056 & alpha Lupi & 2.282 & 122046 & 188434 & 173599 & 400435 & - \\ \hline 
+2064147 & 134481 & kappa Lupi & 3.848 & 190900 & 269035 & 311192 & 454330 & - \\ \hline 
+2079242 & 158427 & alpha Arae & 2.835 & 181564 & 299495 & 283008 & 497554 & - \\ \hline 
+2086192 & 169467 & alpha Telescopii & 3.482 & 166337 & 293712 & 264261 & 452607 & - \\ \hline 
+2094623 & 196171 & alpha Indi & 3.104 & 142117 & 279285 & 209775 & 420754 & - \\ \hline 
+2098110 & 209952 & \makecell[l]{Alnair,\\ alpha Gruis} & 1.763 & 75698 & 170034 & 101517 & 437843 & - \\ \hline 
+2099216 & 214952 & \makecell[l]{Tiaki,\\ beta Gruis} & 2.114 & 97692 & 234739 & 97476 & 421217 & - \\ \hline 
+2100006 & 218670 & iota Gruis & 3.878 & 136272 & 279562 & 165335 & 400079 & - \\ \hline 
+\end{tabular}
+\end{table*}
+
+\newpage
+
+\begin{table*}[h]
+\centering
+\begin{tabular}{|l|l|l|l|HHHHl|}
+\hline
+\textbf{ASCC}    & \textbf{HD}    & \textbf{Names}                  & \boldmath$m_V$  & \textbf{AUW}    & \textbf{AUE}    & \textbf{SAW}    & \textbf{SAE}   & \textbf{Period}     \\ \hline
+\hline
+2104402 & 14228 & phi Eridani & 3.546 & 152455 & 317682 & 148180 & 444632 & - \\ \hline 
+2110269 & 39060 & beta Pictoris & 3.851 & 175652 & 272185 & 172186 & 420967 & - \\ \hline 
+2111805 & 45348 & \makecell[l]{Canopus,\\ alpha Carinae} & -0.64 & 29 & 545 & 1571 & 60898 & - \\ \hline 
+2113099 & 50310 & \makecell[l]{Altaleban,\\ tau Puppis} & 2.93 & 185365 & 284208 & 195685 & 428269 & - \\ \hline 
+2117254 & 65575 & chi Carinae & 3.448 & 216554 & 279097 & 236114 & 434479 & - \\ \hline 
+2119926 & 74195 & omicron Velorum & 3.588 & 216834 & 286216 & 199237 & 437295 & - \\ \hline 
+2120290 & 74956 & delta Velorum & 1.968 & 82402 & 200637 & 129889 & 439146 & 45.15 \\ \hline 
+2129944 & 86440 & phi Velorum & 3.533 & 227038 & 276556 & 277796 & 445705 & - \\ \hline 
+2141153 & 98718 & pi Centauri & 3.884 & 230878 & 253979 & 308891 & 424507 & - \\ \hline 
+2146573 & 105435 & delta Centauri & 2.558 & 167581 & 220369 & 216269 & 385182 & - \\ \hline 
+2146914 & 105937 & rho Centauri & 3.954 & 222601 & 249041 & 309345 & 416426 & - \\ \hline 
+2148632 & 108483 & sigma Centauri & 3.903 & 211649 & 252105 & 299710 & 411859 & - \\ \hline 
+2154691 & 118716 & epsilon Centauri & 2.272 & 119054 & 186701 & 166476 & 406334 & - \\ \hline 
+2162355 & 134505 & zeta Lupi & 3.398 & 214278 & 298075 & 351660 & 474895 & - \\ \hline 
+2182568 & 165024 & theta Arae & 3.664 & 183731 & 312778 & 302575 & 496629 & - \\ \hline 
+2195224 & 215789 & epsilon Gruis & 3.48 & 146373 & 328673 & 194265 & 479643 & - \\ \hline 
+2198437 & 6882 & \makecell[l]{Wurren,\\ zeta Phoenicis} & 3.977 & 157643 & 329094 & 166608 & 470090 & 1.6697671 \\ \hline 
+2199019 & 10144 & \makecell[l]{Achernar,\\ alpha Eridani} & 0.504 & 2000 & 34653 & 61763 & 299143 & - \\ \hline 
+2203013 & 29305 & alpha Doradus & 3.232 & 178256 & 309163 & 163391 & 447895 & 2.943 \\ \hline 
+2212858 & 71129 & epsilon Carinae A & 2.009 & 66658 & 186685 & 122020 & 446786 & - \\ \hline 
+2217847 & 80404 & \makecell[l]{Aspidiske,\\ iota Carinae} & 2.236 & 106861 & 235433 & 184823 & 452737 & - \\ \hline 
+2218411 & 81188 & kappa Velorum & 2.469 & 138156 & 239710 & 185936 & 423057 & - \\ \hline 
+2219507 & 82668 & N Velorum & 3.165 & 233276 & 275917 & 279514 & 436596 & - \\ \hline 
+2229331 & 90853 & s Carinae & 3.818 & 239051 & 303514 & 305420 & 463960 & - \\ \hline 
+2234363 & 94510 & u Carinea & 3.776 & 240649 & 285660 & 319970 & 447691 & - \\ \hline 
+2237409 & 96918 & x Carinea & 3.911 & 242168 & 292536 & 337653 & 458901 & - \\ \hline 
+2246690 & 106490 & \makecell[l]{Imai,\\ delta Crucis} & 2.779 & 192208 & 232750 & 250937 & 377873 & - \\ \hline 
+2248482 & 108903 & \makecell[l]{Gacrux,\\ gamma Crucis} & 1.656 & 42955 & 89368 & 66015 & 382630 & - \\ \hline 
+2250231 & 111123 & \makecell[l]{Mimosa,\\ beta Crucis} & 1.294 & 19909 & 38198 & 100852 & 414253 & - \\ \hline 
+2268985 & 143474 & iota$^1$ Normae & 3.641 & 220918 & 312421 & 360193 & 524270 & - \\ \hline 
+2274286 & 151249 & eta Arae & 3.766 & 208546 & 325429 & 326456 & 531368 & - \\ \hline 
+2275069 & 152786 & zeta Arae & 3.108 & 210763 & 319779 & 340171 & 517338 & - \\ \hline 
+2277091 & 157244 & beta Arae & 2.819 & 203779 & 318868 & 291356 & 513729 & - \\ \hline 
+2277100 & 157246 & gamma Arae & 3.315 & 206553 & 324187 & 308237 & 444850 & - \\ \hline 
+2286020 & 193924 & \makecell[l]{Peacock,\\ alpha Pavonis} & 1.917 & 64754 & 160068 & 121707 & 447170 & - \\ \hline 
+2286969 & 198700 & beta Indi & 3.645 & 186150 & 371738 & 254237 & 533966 & - \\ \hline 
+2290853 & 219571 & gamma Tucanae & 3.992 & 163684 & 372844 & 207675 & 488036 & - \\ \hline 
+2293937 & 12311 & alpha Hydri & 2.851 & 161910 & 355190 & 185208 & 499254 & - \\ \hline 
+2295857 & 23817 & beta Reticuli & 3.832 & 193930 & 373286 & 197764 & 536622 & - \\ \hline 
+2296439 & 27256 & alpha  Reticuli & 3.331 & 192775 & 342198 & 185998 & 488330 & - \\ \hline 
+\end{tabular}
+\end{table*}
+
+\newpage
+
+\begin{table*}[h]
+\centering
+\begin{tabular}{|l|l|l|l|HHHHl|}
+\hline
+\textbf{ASCC}    & \textbf{HD}    & \textbf{Names}                  & \boldmath$m_V$  & \textbf{AUW}    & \textbf{AUE}    & \textbf{SAW}    & \textbf{SAE}   & \textbf{Period}     \\ \hline
+\hline
+2298409 & 37350 & beta Doradus & 3.803 & 196565 & 325820 & 205225 & 488500 & 9.8426 \\ \hline 
+2300928 & 50241 & alpha Pictoris & 3.243 & 207984 & 319582 & 244671 & 469327 & - \\ \hline 
+2307136 & 76728 & c Carinae & 3.831 & 238611 & 288090 & 317961 & 452865 & - \\ \hline 
+2308342 & 79447 & i Carinae & 3.953 & 239956 & 295042 & 315219 & 472620 & - \\ \hline 
+2311128 & 84810 & l Carinae & 3.74 & 242772 & 311485 & 337630 & 513640 & 35.53584 \\ \hline 
+2315295 & 89388 & q Carinae & 3.369 & 245610 & 295683 & 305155 & 468284 & - \\ \hline 
+2317331 & 91465 & p Carinae & 3.359 & 236697 & 297669 & 310154 & 474416 & - \\ \hline 
+2318884 & 93030 & theta Carinae & 2.73 & 194361 & 262524 & 246325 & 473431 & - \\ \hline 
+2325848 & 100841 & lambda Centauri & 3.114 & 240881 & 297572 & 329583 & 481397 & - \\ \hline 
+2333058 & 107446 & \makecell[l]{Ginan, \\epsilon Crucis} & 3.591 & 240707 & 277907 & 364290 & 434380 & - \\ \hline 
+2333718 & 108248 & \makecell[l]{Acrux,\\ alpha$^1$ Crucis} & 1.039 & 675 & 12055 & 80989 & 315550 & - \\ \hline 
+2345078 & 122451 & \makecell[l]{Hadar,\\ beta Centauri} & 0.58 & 390 & 11996 & 79362 & 312783 & - \\ \hline 
+2348878 & 128620 & \makecell[l]{Rigil Kentaurus,\\ alpha Centauri A} & -0.057 & 50 & 5243 & 32508 & 81824 & - \\ \hline 
+2349085 & 128898 & alpha Circini & 3.174 & 235128 & 313339 & 371518 & 588465 & - \\ \hline 
+2354207 & 141891 & beta Trianguli Australis & 2.826 & 219234 & 308363 & 351282 & 599093 & - \\ \hline 
+2356113 & 145544 & delta Trianguli Australis & 3.846 & 229778 & 317196 & 368887 & 558970 & - \\ \hline 
+2361416 & 158094 & delta Arae & 3.589 & 212151 & 337792 & 350269 & 567363 & - \\ \hline 
+2362160 & 160635 & eta Pavonis & 3.585 & 214507 & 351517 & 350263 & 604918 & - \\ \hline 
+2370345 & 211416 & alpha Tucanae & 2.855 & 166787 & 369612 & 195406 & 505740 & - \\ \hline 
+2381455 & 57623 & delta Volantis & 3.964 & 253969 & 354612 & 278629 & 546272 & - \\ \hline 
+2383925 & 71878 & beta Volantis & 3.763 & 243511 & 343635 & 312020 & 529055 & - \\ \hline 
+2385516 & 78045 & alpha Volantis & 3.994 & 246484 & 325837 & 335319 & 533175 & - \\ \hline 
+2386073 & 80007 & \makecell[l]{Miaplacidus, \\ beta Carinae}  & 1.661 & 41869 & 157056 & 193001 & 562705 & - \\ \hline 
+2387890 & 85123 & upsilon Carinae A & 2.993 & 231904 & 317996 & 335441 & 533850 & - \\ \hline 
+2395368 & 102249 & lambda Muscae & 3.624 & 246222 & 314548 & 362914 & 505857 & - \\ \hline 
+2399317 & 109668 & alpha Muscae & 2.681 & 210319 & 294455 & 329596 & 501058 & - \\ \hline 
+2399980 & 110879 & bet Muscae & 3.286 & 250085 & 314634 & 360350 & 552228 & - \\ \hline 
+2410740 & 135382 & gamma Trianguli Australis & 2.875 & 236493 & 318439 & 396263 & 593142 & - \\ \hline 
+2417375 & 150798 & \makecell[l]{Atria, \\ alpha Trianguli Australis} & 1.911 & 99702 & 154691 & 185686 & 542791 & - \\ \hline 
+2424942 & 190248 & delta Pavonis & 3.529 & 196507 & 373301 & 282071 & 629418 & - \\ \hline 
+2425895 & 197051 & bet Pavonis & 3.415 & 186129 & 379733 & 271656 & 617554 & - \\ \hline 
+2430714 & 2151 & bet Hydri & 2.792 & 231346 & 457263 & 215032 & 640299 & - \\ \hline 
+2438259 & 24512 & gamma Hydri & 3.263 & 234194 & 427581 & 194968 & 624806 & - \\ \hline 
+2445952 & 55865 & gamma$^2$ Volantis & 3.756 & 265796 & 376123 & 273270 & 554573 & - \\ \hline 
+2455523 & 89080 & omega Carinae & 3.293 & 258150 & 368822 & 343038 & 553292 & - \\ \hline 
+2456263 & 90589 & I Carinae & 3.983 & 290455 & 362275 & 371888 & 587257 & - \\ \hline 
+2472748 & 129078 & alpha Apodis & 3.813 & 284354 & 342175 & 402492 & 563655 & - \\ \hline 
+2481765 & 147675 & gamma Apodis & 3.861 & 285336 & 378340 & 381377 & 658956 & - \\ \hline 
+2493279 & 188228 & epsilon Pavonis & 3.946 & 225994 & 434979 & 289883 & 667901 & - \\ \hline 
+2497346 & 205478 & nu Octantis & 3.73 & 218645 & 434742 & 237142 & 625119 & - \\ \hline 
+\end{tabular}
+\end{table*}
+\end{appendix}
 
 \end{document}
