@@ -36,7 +36,7 @@ dag:
 
 # Custom file dependencies
 dependencies:
-  # src/scripts/my_script.py:
+  src/scripts/my_script.py:
   #   - src/data/dataset_for_my_script.dat
   # src/tex/ms.tex:
   #   - src/tex/stylesheet.tex
