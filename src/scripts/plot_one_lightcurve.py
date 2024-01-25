@@ -24,7 +24,7 @@ def plotLightCurve(star):
     starcatloc = np.where(starcat['ascc'] == str(star))[0][0]
     starinfo = starcat[starcatloc]
     HD = starinfo['HD']    
-    final_data = fits.getdata(paths.data / f'{HD}.fits.gz')
+    final_data = fits.getdata(paths.data / f'{HD}.fits')
     AUWcam = np.where(final_data['camera'] ==1)
     AUW = final_data[AUWcam]
     AUEcam = np.where(final_data['camera'] ==0)
@@ -36,26 +36,35 @@ def plotLightCurve(star):
     
     plt.rcParams.update({'font.size': 14})
 
+    stu = dict(alpha=0.1, rasterized=True,marker='o',mec='none',markersize=1,linestyle="")
+
+    mj=2400000.5
+
     fig, axs = plt.subplots(5, figsize = (16.0, 10.0), sharex = True)
     fig.suptitle('ASCC '+ str(star)+ ', HD ' + str(HD))
-    axs[0].plot(SAE['jd'], SAE['mag0'], '.', alpha = 0.1, color = 'red', rasterized=True)
-    axs[0].plot(AUE['jd'], AUE['mag0'], '.', alpha = 0.1, color = 'gold', rasterized=True)
-    axs[0].plot(SAW['jd'], SAW['mag0'], '.', alpha = 0.1, color = 'turquoise', rasterized=True)
-    axs[0].plot(AUW['jd'], AUW['mag0'], '.', alpha = 0.1, color = 'royalblue', rasterized=True)
+    axs[0].plot(SAE['jd']-mj, SAE['mag0'], color = 'red', **stu)
+    axs[0].plot(AUE['jd']-mj, AUE['mag0'], color = 'gold', **stu)
+    axs[0].plot(SAW['jd']-mj, SAW['mag0'], color = 'turquoise', **stu)
+    axs[0].plot(AUW['jd']-mj, AUW['mag0'], color = 'royalblue', **stu)
 
-    leg = axs[0].legend(['SAE', 'AUE', 'SAW', 'AUW'], bbox_to_anchor = (1, 1))
+#    leg = axs[0].legend(['SAE', 'AUE', 'SAW', 'AUW'], bbox_to_anchor = (1, 1))
 
-    axs[1].plot(SAE['jd'], SAE['mag0'], '.', alpha = 0.1, color = 'red')
-    axs[2].plot(AUE['jd'], AUE['mag0'], '.', alpha = 0.1, color = 'gold')
-    axs[3].plot(SAW['jd'], SAW['mag0'], '.', alpha = 0.1, color = 'turquoise')
-    axs[4].plot(AUW['jd'], AUW['mag0'], '.', alpha = 0.1, color = 'royalblue')
+    axs[1].plot(SAE['jd']-mj, SAE['mag0'], color = 'red', **stu)
+    axs[2].plot(AUE['jd']-mj, AUE['mag0'], color = 'gold', **stu)
+    axs[3].plot(SAW['jd']-mj, SAW['mag0'], color = 'turquoise', **stu)
+    axs[4].plot(AUW['jd']-mj, AUW['mag0'], color = 'royalblue', **stu)
 
-    axs[0].set(xlabel = " ", ylabel = "Magnitude")
-    axs[1].set(xlabel = " ", ylabel = "Magnitude")
-    axs[2].set(xlabel = " ", ylabel = "Magnitude")
-    axs[3].set(xlabel = " ", ylabel = "Magnitude")
+    # axs[0].set(xlabel = " ", ylabel = "Magnitude")
+    # axs[1].set(xlabel = " ", ylabel = "Magnitude")
+    # axs[2].set(xlabel = " ", ylabel = "Magnitude")
+    # axs[3].set(xlabel = " ", ylabel = "Magnitude")
 
-    axs[4].set(xlabel = "Time (Julian Dates)", ylabel = "Magnitude")
+    # axs[4].set(xlabel = "Time (Julian Dates)", ylabel = "Magnitude")
+
+    fig.supylabel('Magnitude',fontsize=20)
+
+    axs[4].set_xlabel("Time (Modified Julian Date)",fontsize=20)
+
 
     axs[0].set_title("All cameras", fontsize = 14)
     axs[1].set_title("SAE", fontsize = 14)
