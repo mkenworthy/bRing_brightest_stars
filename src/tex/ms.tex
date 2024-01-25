@@ -229,10 +229,7 @@ The majority of the stars with an apparent magnitude brighter than 4 are giants,
 %
 Only a few of them are main sequence or late type dwarfs.
 
-
 \subsection{Data processing}
-
-TODO get the script for the HR diagram and make sure it still runs.
 
 The data processing from the observatory to the local computers are detailed in \citet{Stuik_2014}.
 %
@@ -273,8 +270,6 @@ The resulting 628 data files are 144 Gb in size and are retrievable from the pub
 
 \subsection{Rejection of points}
 
-%To make long-term light curves, we started with data reduction, which we wrote using Python 2.7.
-%
 The data reduction consists of multiple steps.
 %
 For each step, we used the data of one of the 4 bRing cameras at a time.
@@ -290,9 +285,10 @@ The quarterly data bins the photometry to every 50 data points, enabling searche
 We use the daily data since the bright stars have very little quarterly data due to the binning including saturated photometric points.
 
 Variability is seen in the daily data due to several systematic effects.
-
 %
-This results in a distribution of data points around the mean value. To determine whether a data point should be rejected, the standard deviation was used.
+This results in a distribution of data points around the mean value.
+%
+To determine whether a data point should be rejected, the standard deviation was used.
 %
 When removing data points based on standard deviation, we used the Astropy function \texttt{sigma\_clip}.
 %
@@ -302,7 +298,7 @@ Based on the final calculated mean, outliers were removed from the data set.
 %
 We also used this sigma-clipped-mean in further calculations when needed, instead of the mean which can be calculated before sigma-clipping.
 
-We started the data reduction by selecting good data points from the daily and quarterly data using these constraints:
+We start the data reduction by selecting good data points from the daily and quarterly data using these constraints:
 
 \begin{enumerate}
     \item All data points from the eastern Australian camera on 3 and 4 April 2018 and the eastern South African camera on 10 September 2020 were discarded due to significant outliers of unknown origin.
@@ -323,7 +319,7 @@ We started the data reduction by selecting good data points from the daily and q
     %
     These tell us if the measured flux is too high or too low to be realistic or if no photometry was performed due to, e.g., the star being too close to the edge of the image.
     %
-    Only the data without any bad flags was used. 
+    Only data without any bad flags was used. 
 \end{enumerate}
 
 After selecting the data points that pass all these steps in both the daily and quarterly data, the daily data was calibrated.
@@ -335,7 +331,15 @@ The impact of each step of the reduction is shown in Figure~\ref{fig:reduction}.
 \begin{figure*}
     \centering
     \includegraphics[width=\linewidth]{figures/reduction.pdf}
-    \caption{The first three steps of the data reduction are shown here. The first plot shows the raw data that was saved by bRing. The second plot shows the data without the long exposures. Lastly, the data without the bad photometry and astrometry flags is plotted. The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis.}
+    \caption{The first three steps of the data reduction are shown here.
+    %
+    The first plot shows the raw data that was saved by bRing.
+    %
+    The second plot shows the data without the long exposures.
+    %
+    Lastly, the data without the bad photometry and astrometry flags is plotted.
+    %
+    The time is displayed on the horizontal axis in Julian Date and the apparent magnitude is displayed on the vertical axis.}
     \label{fig:reduction}
     \script{plot_reduction.py}
 \end{figure*}
@@ -344,11 +348,11 @@ The impact of each step of the reduction is shown in Figure~\ref{fig:reduction}.
 
 After performing data reduction, the data needed to be detrended due to effects not caused by the star itself.
 %
-For daily trends the effects are caused by the varying shape of the point spread function and its illuimination of the lenslets on the bRing detector cameras, which changes the amount of light within the photometric aperture.
+For daily trends the effects are caused by the varying shape of the point spread function and its illumination of the lenslets on the bRing detector cameras, which changes the amount of light within the photometric aperture.
 %
 For monthly trends the effects are caused by the scattered light when the Moon is visible at the site.
 
-Three trends were removed: two daily trends, and the monthly trend caused by the Moon.
+Three systematic trends were removed: two daily trends, and the monthly trend caused by the Moon.
 %
 We performed detrending similar to the secondary calibration used in \cite{Talens_2018}.
 
@@ -366,14 +370,11 @@ Subtracting this mean at every LSTSEQ removes this particular trend.
 %
 We detrended this trend per year, because the transmission changes slightly over time due to envrionmental effects of the observatory warming and cooling leading to small misalignments, and to the accumulation of dust on the entrance windows.
 
-
-
-
 The detrending of the second daily trend removes the effects caused by the Sun rising and setting.
 %
 We divided a day into 500 bins, and determined the sigma-clipped mean of the data points in each bin.
 %
-Five iterations of a sigma clipping altorithm with a threshold of 5 sigma are applied.
+Five iterations of a sigma clipping algorithm with a threshold of 5 sigma are applied.
 %
 %Each time sigma-clipping is used for detrending, the default values of 3$\sigma$,  and 5 iterations are applied.
 %
@@ -387,11 +388,7 @@ At this stage, the light curve for each star has all known trends removed.
 %
 For variable stars with a known period, we removed the large amplitude periodic variations before carrying out the detrending listed above, and then added this offset back into the light curve after the reduction steps.
 %
-Examples of the detrending steps are shown in the figures below.
-
-%XXXX wait for detrendsteps_plot.py
-
-
+Examples of the detrending steps are shown in Figure~\ref{fig:reduction}.
 
 \begin{figure*}
     \centering
@@ -403,46 +400,47 @@ Examples of the detrending steps are shown in the figures below.
     \script{plot_lightcurves.py}
 \end{figure*}
 
-\section{Results}
+\section{Representative Light Curves}
 \label{sec:results}
+% XXX in a Rosa email what are the numbers
+% message://%3c1131158490.6158.1695733941581@mail.ziggo.nl%3e
 
-\subsection{Representative light curves}
-The light curves of the several brightest stars on the southern hemisphere are presented.
+% I believe the HR-diagram was indeed made with Gaia data.
 
-XXX in a Rosa email what are the numbers
+% In order to make the plots in the ``Representative light curves'' section, we could use the makelightcurve.py script that we shared before. You will only have to alter the number all the way at the bottom of the script in "plotLightCurve", which has to be the ASCC number of the star that you want to plot.
 
-message://%3c1131158490.6158.1695733941581@mail.ziggo.nl%3e
+% These are the stars and their ASCC numbers that you requested:
 
-I believe the HR-diagram was indeed made with Gaia data.
+% The brightest star we have: Canopus: ASCC 2111805
+% Delta Pavonis: ASCC 2424942
+% Two interesting variable stars: zeta Phoenicis, eclipsing binary: ASCC 2198437
+% and l Carinae, cepheid: ASCC 2311128
 
-In order to make the plots in the ``Representative light curves'' section, we could use the makelightcurve.py script that we shared before. You will only have to alter the number all the way at the bottom of the script in "plotLightCurve", which has to be the ASCC number of the star that you want to plot.
+% Attached are the code for the reduction-steps plot and the HR-diagram.
 
-These are the stars and their ASCC numbers that you requested:
+% The brightest star you have.
 
-The brightest star we have: Canopus: ASCC 2111805
-Delta Pavonis: ASCC 2424942
-Two interesting variable stars: zeta Phoenicis, eclipsing binary: ASCC 2198437
-and l Carinae, cepheid: ASCC 2311128
+% Delta Pavonis.
 
-Attached are the code for the reduction-steps plot and the HR-diagram.
+% Two interesting variable stars.
 
-The brightest star you have.
-
-Delta Pavonis.
-
-Two interesting variable stars.
-
-%\begin{enumerate}
+% \begin{enumerate}
 % \item \ref{Canopus} shows the light curve of alpha Carinae, the second brightest star in the sky and the brightest star in the southern hemisphere. It is better known as Canopus. The light curve can be seen in.
+
 % \item \ref{Rigil_Kentaurus} shows the light curve of alpha Centauri A, the third brightest stars in the sky. It is also known as Rigil Kentaurus. It is part of the alpha Centauri system, which contains Proxima Centauri, the closest star known to the Sun. 
+
 % \item \ref{Achernar} presents the light curve of alpha Eridani, also known as Achernar.
+
 % \item \ref{Hadar} shows the light curve of beta Centauri, also called Hadar. This star is a Beta Cephei.
+
 % \item \ref{Acrux} presents the light curve of alpha Crucis, a binary star system also known as Acrux.
+
 % \item \ref{Mimosa} shows the light curve of beta Crucis, also known as Mimosa.
+
 % \item \ref{Shaula} shows the light curve of lambda Scorpii, also known as Shaula. This is a binary system, with a Beta Cephei as primary star.
+
 % \item \ref{Gacrux} displays the light curve of gamma Crucis, also called Gacrux.
 % \item \ref{Miaplacidus} shows the ninth brightest star, beta Carinae. It is also known as Miaplacidus.
-% \item \ref{Alnair} shows the final brightest star. This is alpha Gruis, also known as Alnair.
 
 % \begin{figure}
 %     \centering
@@ -515,17 +513,11 @@ Two interesting variable stars.
 % \end{figure}
 % \end{enumerate}
 
-Two stars are very close to the Sun in the HR diagram in \ref{HRD}.
-%
-These stars are delta Pavonis and Beta Hydri.
-%
-Delta Pavonis has a luminosity of 1.22 L$_\odot$ \citep{Bruntt_2010}, a mass of 0.991 M$_\odot$ and a radius of 1.22 R$_\odot$ \citep{2008yCat..21680297T}.
-%
-It is a subgiant star which will relatively soon start to become a red giant.
-%
-Beta Hydri has a luminosity of 3.49 L$_\odot$, a mass of 1.08 M$_\odot$ and a of radius 1.81 R$_\odot$ \citep{Brand_o_2011}.
-%
-Beta Hydri is also a subgiant star. 
+% Two stars that are similar to the Sun are delta Pavonis and Beta Hydri.
+% %
+% Delta Pavonis has a luminosity of 1.22 L$_\odot$ \citep{Bruntt_2010}, a mass of 0.991 M$_\odot$ and a radius of 1.22 R$_\odot$ \citep{2008yCat..21680297T} identified as a subgiant.
+% %
+% Beta Hydri has a luminosity of 3.49 L$_\odot$, a mass of 1.08 M$_\odot$ and a of radius 1.81 R$_\odot$ \citep{Brand_o_2011} and is also a subgiant star. 
 
 % \begin{figure}
 %     \centering
@@ -547,11 +539,11 @@ Beta Hydri is also a subgiant star.
 
 157 light curves of the brightest stars ($m_V < 4$) in the southern hemisphere ($\delta \leq -30^o$) were created.
 %
-This is the first time light curves have been produced for such bright stars.
+This is the first time light curves of this span of epochs have been produced for such bright stars.
 %
-We discuss our results in the subsections below. 
-%
-Limitations and strengths of the methods used are given as well.
+% We discuss our results in the subsections below. 
+% %
+% Limitations and strengths of the methods used are given as well.
 
 \subsection{Data reduction}
 
@@ -576,14 +568,17 @@ Limitations and strengths of the methods used are given as well.
 
 % Furthermore, for the eastern Australian camera, the magnitude of some stars reaches values around $10^{19}$ or higher on one day, which are clearly too extreme. This could be caused by some error in the measurements. The scattering is reduced by removing the 100$\sigma$ magnitude outliers. This high value is chosen, because a smaller value would remove some of the good data points. 
 
-
 Intrapixel variations were neglected in the data reduction.
 %
 These quasi-sinusoidal modulations are caused by the interline design of the CCDs \citep{Talens_2018}.
 %
 The intrapixel variations cause noise in the light curves, but are too complex to remove in this research.
-
-% The brightest stars which are visible high in the sky have less data points in general. The data at the beginning and end of the night is sufficient to use in the light curves, but the data in the middle of the night cannot be used. These data points are usually saturated, because the star is at its brightest when it is positioned high in the sky.
+%
+The brightest stars which are visible high in the sky have less data points in general.
+%
+The data at the beginning and end of the night is sufficient to use in the light curves, but the data in the middle of the night cannot be used.
+%
+These data points are usually saturated, because the star is at its brightest when it is positioned high in the sky.
 
 % In contrast, less bright stars which have a declination close to the horizon have fewer data points than stars higher in the sky. This is because they are visible for a smaller amount of time each night. The amount of data points observed still differs for each camera, because of the different locations of the cameras. Overall, the South African eastern camera contains the most data points per star. This is why we mostly use this camera to present the light curves.
 
@@ -676,18 +671,12 @@ If this peak is still found, it should be treated especially carefully, because 
 
 \subsection{Future research}
 
-In the future, the data reduction of the bright stars should be perfected.
-%
-There are still a few errors in the data which should be fixed.
-%
-For example, some invalid values remain.
-
-For the first time, long-term light curves have been made for stars brighter than magnitude 4.
+There are still systematic errors in the data which should be addressed on an individual star basis, predominantly due to poor identification of thin clouds, scattered light reflections due to the moon within the lens system, and from transient sources such as artificial satellites.
 %
 The light curves produced in this research can be used to determine variability in bright stars' emission by searching for periodic signals, which can then be matched up with other observations.
 %
 %The periodic signals discovered in the bRing data can be studied in more detail using different telescopes.
-
+%
 The shapes of the periods of variable stars brighter than magnitude 4 can now be made visible in a period folded light curve.
 
 \section{Conclusions}
